@@ -1316,14 +1316,29 @@ function AoVivo({ club, players, opponents, game, onTerminar, onVoltar, onAtuali
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 12 }}>
-        <div style={{ flex: 1, background: T.card, border: `1px solid ${T.sep}`, borderRadius: 12, padding: 10 }}>
-          <div style={{ fontSize: 10, fontWeight: 800, color: T.sub, marginBottom: 6 }}>🥅 PONTAPÉS DE BALIZA · MINHA EQUIPA</div>
-          <button disabled={ended || intervalo} onClick={() => registerPontape("casa")} style={{ width: "100%", background: T.card2, border: `1px solid ${T.sep}`, borderRadius: 8, padding: "8px 0", fontWeight: 800, color: T.text, fontSize: 13, cursor: "pointer", fontFamily: FONT }}>+1 · {pontapes.casa}</button>
-        </div>
-        <div style={{ flex: 1, background: T.card, border: `1px solid ${T.sep}`, borderRadius: 12, padding: 10 }}>
-          <div style={{ fontSize: 10, fontWeight: 800, color: T.sub, marginBottom: 6, textAlign: "right" }}>🥅 PONTAPÉS DE BALIZA · ADVERSÁRIO</div>
-          <button disabled={ended || intervalo} onClick={() => registerPontape("fora")} style={{ width: "100%", background: T.card2, border: `1px solid ${T.sep}`, borderRadius: 8, padding: "8px 0", fontWeight: 800, color: T.text, fontSize: 13, cursor: "pointer", fontFamily: FONT }}>{pontapes.fora} · +1</button>
-        </div>
+        {game.mandante === "fora" ? (
+          <>
+            <div style={{ flex: 1, background: T.card, border: `1px solid ${T.sep}`, borderRadius: 12, padding: 10 }}>
+              <div style={{ fontSize: 10, fontWeight: 800, color: T.sub, marginBottom: 6 }}>🥅 PONTAPÉS DE BALIZA · ADVERSÁRIO</div>
+              <button disabled={ended || intervalo} onClick={() => registerPontape("fora")} style={{ width: "100%", background: T.card2, border: `1px solid ${T.sep}`, borderRadius: 8, padding: "8px 0", fontWeight: 800, color: T.text, fontSize: 13, cursor: "pointer", fontFamily: FONT }}>+1 · {pontapes.fora}</button>
+            </div>
+            <div style={{ flex: 1, background: T.card, border: `1px solid ${T.sep}`, borderRadius: 12, padding: 10 }}>
+              <div style={{ fontSize: 10, fontWeight: 800, color: T.sub, marginBottom: 6, textAlign: "right" }}>🥅 PONTAPÉS DE BALIZA · MINHA EQUIPA</div>
+              <button disabled={ended || intervalo} onClick={() => registerPontape("casa")} style={{ width: "100%", background: T.card2, border: `1px solid ${T.sep}`, borderRadius: 8, padding: "8px 0", fontWeight: 800, color: T.text, fontSize: 13, cursor: "pointer", fontFamily: FONT }}>{pontapes.casa} · +1</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div style={{ flex: 1, background: T.card, border: `1px solid ${T.sep}`, borderRadius: 12, padding: 10 }}>
+              <div style={{ fontSize: 10, fontWeight: 800, color: T.sub, marginBottom: 6 }}>🥅 PONTAPÉS DE BALIZA · MINHA EQUIPA</div>
+              <button disabled={ended || intervalo} onClick={() => registerPontape("casa")} style={{ width: "100%", background: T.card2, border: `1px solid ${T.sep}`, borderRadius: 8, padding: "8px 0", fontWeight: 800, color: T.text, fontSize: 13, cursor: "pointer", fontFamily: FONT }}>+1 · {pontapes.casa}</button>
+            </div>
+            <div style={{ flex: 1, background: T.card, border: `1px solid ${T.sep}`, borderRadius: 12, padding: 10 }}>
+              <div style={{ fontSize: 10, fontWeight: 800, color: T.sub, marginBottom: 6, textAlign: "right" }}>🥅 PONTAPÉS DE BALIZA · ADVERSÁRIO</div>
+              <button disabled={ended || intervalo} onClick={() => registerPontape("fora")} style={{ width: "100%", background: T.card2, border: `1px solid ${T.sep}`, borderRadius: 8, padding: "8px 0", fontWeight: 800, color: T.text, fontSize: 13, cursor: "pointer", fontFamily: FONT }}>{pontapes.fora} · +1</button>
+            </div>
+          </>
+        )}
       </div>
 
       {pendingRegistration && (
