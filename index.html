@@ -2365,10 +2365,10 @@ function BolasParadasTab({ club, players, planos, setPlanos }) {
 
 /* ============================== CONDIÇÃO FÍSICA ============================== */
 const WELLNESS_NIVEIS = {
-  sono: ["Muito má", "Má", "Razoável", "Boa", "Muito boa"],
-  fadiga: ["Muito elevada", "Elevada", "Moderada", "Reduzida", "Sem fadiga"],
-  dorMuscular: ["Muito elevada", "Elevada", "Moderada", "Ligeira", "Sem dor"],
-  stress: ["Muito elevado", "Elevado", "Moderado", "Reduzido", "Sem stress"],
+  sono: ["Muito má", "Má", "Fraca", "Razoável", "Boa", "Muito boa", "Excelente"],
+  fadiga: ["Muito elevada", "Elevada", "Alguma", "Moderada", "Reduzida", "Quase nenhuma", "Sem fadiga"],
+  dorMuscular: ["Muito elevada", "Elevada", "Alguma", "Moderada", "Ligeira", "Quase nenhuma", "Sem dor"],
+  stress: ["Muito elevado", "Elevado", "Algum", "Moderado", "Reduzido", "Quase nenhum", "Sem stress"],
 };
 const WELLNESS_LABELS = { sono: "😴 Sono", fadiga: "🔋 Fadiga", dorMuscular: "💪 Dor Muscular", stress: "🧠 Stress" };
 const PSE_TIPOS = ["Treino", "Jogo", "Recuperação", "Ginásio", "Sessão Individual", "Reabilitação", "Complementar", "Outro"];
@@ -2376,9 +2376,9 @@ const PSE_NIVEIS = ["Repouso", "Muito leve", "Leve", "Moderado", "Algo intenso",
 
 function calcWellnessTotal(e) { return (e.sono || 0) + (e.fadiga || 0) + (e.dorMuscular || 0) + (e.stress || 0); }
 function classificarWellness(total) {
-  if (total >= 17) return { label: "Muito bom", color: "#30D158" };
-  if (total >= 13) return { label: "Bom", color: "#64D2FF" };
-  if (total >= 9) return { label: "Atenção", color: "#FFD60A" };
+  if (total >= 23) return { label: "Muito bom", color: "#30D158" };
+  if (total >= 17) return { label: "Bom", color: "#64D2FF" };
+  if (total >= 11) return { label: "Atenção", color: "#FFD60A" };
   return { label: "Risco elevado", color: "#FF453A" };
 }
 function calcCarga(duracao, pse) { return (Number(duracao) || 0) * (Number(pse) || 0); }
@@ -2392,8 +2392,8 @@ function statusAtleta(wellnessEntry) {
   if (!wellnessEntry) return { label: "Sem dados", color: T.sub };
   const total = calcWellnessTotal(wellnessEntry);
   const nota = wellnessEntry.notaGeral;
-  if (total <= 8 || (nota != null && nota <= 3)) return { label: "Risco elevado", color: "#FF453A" };
-  if (total <= 12 || (nota != null && nota <= 5)) return { label: "Atenção", color: "#FFD60A" };
+  if (total <= 10 || (nota != null && nota <= 3)) return { label: "Risco elevado", color: "#FF453A" };
+  if (total <= 16 || (nota != null && nota <= 5)) return { label: "Atenção", color: "#FFD60A" };
   return { label: "Disponível", color: "#30D158" };
 }
 
@@ -2459,8 +2459,8 @@ function agregarPSEPorAtleta(jogadorId, entries) {
 function NivelDots({ value, onChange }) {
   return (
     <div style={{ display: "flex", gap: 3 }}>
-      {[1, 2, 3, 4, 5].map((n) => (
-        <div key={n} onClick={() => onChange(n)} style={{ width: 20, height: 20, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, cursor: "pointer", background: value === n ? T.text : T.card2, color: value === n ? "#000" : T.sub, border: `1px solid ${T.sep}` }}>{n}</div>
+      {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+        <div key={n} onClick={() => onChange(n)} style={{ width: 18, height: 18, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 700, cursor: "pointer", background: value === n ? T.text : T.card2, color: value === n ? "#000" : T.sub, border: `1px solid ${T.sep}` }}>{n}</div>
       ))}
     </div>
   );
@@ -2475,7 +2475,7 @@ function VisaoGeralFisica({ players, wellnessEntries, pseEntries, accent }) {
   const emAlerta = wellnessEntries.filter((e) => statusAtleta(e).label !== "Disponível").length;
   const semRegisto = players.length - comWellness;
 
-  const cards = [["😌 Wellness Médio", `${mediaWellness}/20`], ["⭐ Nota Média", `${mediaNota}/10`], ["🏋️ PSE Médio", `${mediaPSE}/10`], ["🔥 Carga Total", `${cargaTotal} UA`], ["❓ Sem Registo", semRegisto], ["⚠️ Em Alerta", emAlerta]];
+  const cards = [["😌 Wellness Médio", `${mediaWellness}/28`], ["⭐ Nota Média", `${mediaNota}/10`], ["🏋️ PSE Médio", `${mediaPSE}/10`], ["🔥 Carga Total", `${cargaTotal} UA`], ["❓ Sem Registo", semRegisto], ["⚠️ Em Alerta", emAlerta]];
 
   return (
     <>
@@ -2519,7 +2519,7 @@ function WellnessListaTab({ players, data, wellnessEntries, setWellnessEntries, 
 
   return (
     <>
-      <div style={{ fontSize: 12, color: T.sub, marginBottom: 14 }}>Escala 1–5 em cada indicador (quanto maior, melhor o estado). A nota geral é de 0 a 10. Podes alterar a data de cada atleta individualmente, se precisares de preencher um dia anterior.</div>
+      <div style={{ fontSize: 12, color: T.sub, marginBottom: 14 }}>Escala 1–7 em cada indicador (quanto maior, melhor o estado). A nota geral é de 0 a 10. Podes alterar a data de cada atleta individualmente, se precisares de preencher um dia anterior.</div>
       {players.map((p) => {
         const e = getEntry(p.id);
         const total = calcWellnessTotal(e);
@@ -2533,7 +2533,7 @@ function WellnessListaTab({ players, data, wellnessEntries, setWellnessEntries, 
               <Avatar label={initials(p.nome)} photo={p.foto} size={32} bg={accent} />
               <div style={{ flex: 1, fontSize: 13, fontWeight: 700, minWidth: 90 }}>{p.nome}</div>
               <input type="date" value={dataAtiva} onChange={(ev) => setDatasIndividuais((prev) => ({ ...prev, [p.id]: ev.target.value }))} style={{ ...inputStyle, width: "auto", padding: "6px 8px", fontSize: 11, border: alterada ? `1px solid ${T.warning}` : `1px solid ${T.sep}` }} />
-              {temDados && <span style={{ fontSize: 11, fontWeight: 800, color: cls.color }}>{total}/20 · {cls.label}</span>}
+              {temDados && <span style={{ fontSize: 11, fontWeight: 800, color: cls.color }}>{total}/28 · {cls.label}</span>}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10, marginBottom: 10 }}>
               {["sono", "fadiga", "dorMuscular", "stress"].map((campo) => (
@@ -2597,6 +2597,11 @@ function PSEListaTab({ players, data, pseEntries, setPseEntries, accent, account
             <div style={{ marginBottom: 8 }}>
               <div style={{ fontSize: 10, color: T.sub, marginBottom: 4, fontWeight: 700 }}>PSE (0–10){e.pse != null ? ` · ${PSE_NIVEIS[e.pse]}` : ""}</div>
               <input type="range" min="0" max="10" value={e.pse ?? 0} onChange={(ev) => update(p.id, { pse: Number(ev.target.value) })} style={{ width: "100%" }} />
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
+                {Array.from({ length: 11 }, (_, n) => (
+                  <span key={n} onClick={() => update(p.id, { pse: n })} style={{ fontSize: 10, fontWeight: e.pse === n ? 800 : 600, color: e.pse === n ? T.text : T.sub, cursor: "pointer", width: 16, textAlign: "center" }}>{n}</span>
+                ))}
+              </div>
             </div>
             <button onClick={() => setObsAberta(obsAberta === p.id ? null : p.id)} style={{ background: "none", border: "none", color: "#0A84FF", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: FONT, padding: 0 }}>{e.observacoes ? "📝 Editar observações" : "+ Observações"}</button>
             {obsAberta === p.id && <textarea value={e.observacoes || ""} onChange={(ev) => update(p.id, { observacoes: ev.target.value })} rows={2} style={{ ...inputStyle, marginTop: 8, resize: "vertical" }} placeholder="Observações" />}
@@ -2640,7 +2645,7 @@ function HistoricoFisico({ players, wellnessEntries, pseEntries, accent }) {
         <div key={data} style={{ background: T.card, border: `1px solid ${T.sep}`, borderRadius: 12, padding: "10px 14px", marginBottom: 8, fontSize: 12 }}>
           <div style={{ fontWeight: 700, marginBottom: 4 }}>{data}</div>
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap", color: T.sub }}>
-            {w && <span>Wellness: <b style={{ color: T.text }}>{calcWellnessTotal(w)}/20</b></span>}
+            {w && <span>Wellness: <b style={{ color: T.text }}>{calcWellnessTotal(w)}/28</b></span>}
             {w?.notaGeral != null && <span>Nota: <b style={{ color: T.text }}>{w.notaGeral}/10</b></span>}
             {p && <span>PSE: <b style={{ color: T.text }}>{p.pse}</b> · Carga: <b style={{ color: T.text }}>{calcCarga(p.duracao, p.pse)} UA</b></span>}
           </div>
@@ -2675,7 +2680,7 @@ function RelatorioWellness({ club, players, entries, periodoTexto, responsavel, 
             {responsavel && <div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>Responsável: {responsavel}</div>}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
-            {[["Registos", `${comDados}/${players.length}`], ["Wellness Médio", `${mediaTotal}/20`], ["Nota Média", `${mediaNota}/10`], ["Em Alerta", emAlerta]].map(([label, val]) => (
+            {[["Registos", `${comDados}/${players.length}`], ["Wellness Médio", `${mediaTotal}/28`], ["Nota Média", `${mediaNota}/10`], ["Em Alerta", emAlerta]].map(([label, val]) => (
               <div key={label} style={{ background: "#fafafa", border: "1px solid #eee", borderRadius: 12, padding: "12px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 16, fontWeight: 800 }}>{val}</div>
                 <div style={{ fontSize: 9, color: "#888", fontWeight: 700, textTransform: "uppercase", marginTop: 2 }}>{label}</div>
