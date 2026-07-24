@@ -2271,7 +2271,7 @@ function RelatorioBolaParada({ club, players, plano, onVoltar }) {
       </div>
 
       <div id="report-paper" style={{ background: "#FFFFFF", color: "#111", borderRadius: 18, padding: 24, marginBottom: 24, overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.35)" }}>
-        <div className="pdf-block" style={{ display: "flex", alignItems: "center", gap: 16, background: "linear-gradient(135deg, #111111, #B9873B)", borderRadius: 16, padding: "16px 22px", color: "#fff", marginBottom: 16, boxShadow: "0 8px 24px rgba(0,0,0,0.18)" }}>
+        <div className="pdf-block" style={{ display: "flex", alignItems: "center", gap: 14, background: "linear-gradient(135deg, #111111, #B9873B)", borderRadius: 14, padding: "10px 18px", color: "#fff", marginBottom: 10, boxShadow: "0 8px 24px rgba(0,0,0,0.18)" }}>
           <ReportLogo size={26} />
           <div style={{ width: 1, height: 28, background: "rgba(255,255,255,0.3)" }} />
           <div style={{ width: 34, height: 34, borderRadius: 17, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
@@ -2283,33 +2283,37 @@ function RelatorioBolaParada({ club, players, plano, onVoltar }) {
           </div>
         </div>
 
-        <div className="pdf-block" style={{ background: "#fafafa", border: "1px solid #eee", borderRadius: 14, padding: 14, marginBottom: 16, boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
-          <div style={{ position: "relative", width: "100%", aspectRatio: plano.campo === "inteiro" ? "100 / 62" : "1.24", background: "#2e7d32", border: "1px solid #ddd", borderRadius: 12, overflow: "hidden", boxShadow: "0 6px 16px rgba(0,0,0,0.15)" }}>
-            <GrassStripes />
-            {plano.campo === "inteiro" ? <PitchLinesHorizontal /> : <PitchHalfLines />}
-            {plano.tokens.map((t) => {
-              const jogador = t.tipo === "proprio" ? players.find((p) => p.id === t.jogadorId) : null;
-              return (
-                <div key={t.id} style={{ position: "absolute", left: `${t.x}%`, top: `${t.y}%`, transform: "translate(-50%,-50%)" }}>
-                  {t.tipo === "bola" ? (
-                    <div style={{ fontSize: 22, lineHeight: 1, filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.5))" }}>⚽</div>
-                  ) : t.tipo === "adversario" ? (
-                    <div style={{ width: 38, height: 38, borderRadius: 19, background: "#111111", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, color: "#fff", border: "2px solid #fff", boxShadow: "0 2px 5px rgba(0,0,0,0.35)" }}>A</div>
-                  ) : t.tipo === "marcador" ? (
-                    <div style={{ width: 24, height: 24, borderRadius: 12, background: "#fff", border: "2px solid #fff", boxShadow: "0 2px 5px rgba(0,0,0,0.35)" }} />
-                  ) : (
-                    <div style={{ position: "relative" }}>
-                      <Avatar label={initials(jogador?.nome)} photo={jogador?.foto} size={38} bg={accent} />
-                      <div style={{ position: "absolute", bottom: -3, right: -6, background: "#111", color: "#fff", fontSize: 10, fontWeight: 800, borderRadius: 7, padding: "0 4px", border: "1px solid #fff" }}>{jogador?.numero}</div>
+        <div className="pdf-block" style={{ background: "#fafafa", border: "1px solid #eee", borderRadius: 14, padding: 12, marginBottom: 10, boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+          <div style={{ width: plano.campo === "inteiro" ? "80%" : "62%", margin: "0 auto" }}>
+            <div style={{ position: "relative", width: "100%", height: 0, paddingBottom: plano.campo === "inteiro" ? "62%" : "80.6%", background: "#2e7d32", border: "1px solid #ddd", borderRadius: 12, overflow: "hidden", boxShadow: "0 6px 16px rgba(0,0,0,0.15)" }}>
+              <div style={{ position: "absolute", inset: 0 }}>
+                <GrassStripes />
+                {plano.campo === "inteiro" ? <PitchLinesHorizontal /> : <PitchHalfLines />}
+                {plano.tokens.map((t) => {
+                  const jogador = t.tipo === "proprio" ? players.find((p) => p.id === t.jogadorId) : null;
+                  return (
+                    <div key={t.id} style={{ position: "absolute", left: `${t.x}%`, top: `${t.y}%`, transform: "translate(-50%,-50%)" }}>
+                      {t.tipo === "bola" ? (
+                        <div style={{ fontSize: 22, lineHeight: 1, filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.5))" }}>⚽</div>
+                      ) : t.tipo === "adversario" ? (
+                        <div style={{ width: 38, height: 38, borderRadius: 19, background: "#111111", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, color: "#fff", border: "2px solid #fff", boxShadow: "0 2px 5px rgba(0,0,0,0.35)" }}>A</div>
+                      ) : t.tipo === "marcador" ? (
+                        <div style={{ width: 24, height: 24, borderRadius: 12, background: "#fff", border: "2px solid #fff", boxShadow: "0 2px 5px rgba(0,0,0,0.35)" }} />
+                      ) : (
+                        <div style={{ position: "relative" }}>
+                          <Avatar label={initials(jogador?.nome)} photo={jogador?.foto} size={38} bg={accent} />
+                          <div style={{ position: "absolute", bottom: -3, right: -6, background: "#111", color: "#fff", fontSize: 10, fontWeight: 800, borderRadius: 7, padding: "0 4px", border: "1px solid #fff" }}>{jogador?.numero}</div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="pdf-block" style={{ display: "flex", justifyContent: "center", gap: 18, flexWrap: "wrap", background: "#fafafa", border: "1px solid #eee", borderRadius: 12, padding: "12px 16px", fontSize: 11, fontWeight: 600, color: "#555" }}>
+        <div className="pdf-block" style={{ display: "flex", justifyContent: "center", gap: 18, flexWrap: "wrap", background: "#fafafa", border: "1px solid #eee", borderRadius: 12, padding: "9px 16px", fontSize: 11, fontWeight: 600, color: "#555" }}>
           <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 6, background: accent, display: "inline-block" }} /> Minha Equipa · {nJogadores}</span>
           <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 6, background: "#111111", display: "inline-block" }} /> Adversário · {nAdversarios}</span>
           <span style={{ display: "flex", alignItems: "center", gap: 6 }}>⚽ Bola</span>
@@ -3657,7 +3661,7 @@ window.exportarRelatorioPDFBlocos = async function (nomeFicheiro, orientacao) {
     const pdf = new jsPDF({ orientation: orientacao || "portrait", unit: "pt", format: "a4" });
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 26;
+    const margin = 20;
     const usableWidth = pageWidth - margin * 2;
     let blocks = Array.from(container.querySelectorAll(".pdf-block"));
     if (blocks.length === 0) blocks = [container];
