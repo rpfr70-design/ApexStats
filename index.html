@@ -2256,14 +2256,14 @@ function PlanoTaticoEditor({ club, players, plano, onGuardar, onCancelar }) {
 }
 
 function RelatorioBolaParada({ club, players, plano, onVoltar }) {
-  const exportarPDF = () => { if (window.exportarRelatorioPDFBlocos) window.exportarRelatorioPDFBlocos(`Plano_${plano.nome.replace(/\\s+/g, "_")}.pdf`); else window.print(); };
+  const exportarPDF = () => { if (window.exportarRelatorioPDFBlocos) window.exportarRelatorioPDFBlocos(`Plano_${plano.nome.replace(/\\s+/g, "_")}.pdf`, "landscape"); else window.print(); };
   const accent = accessibleAccent(club?.corPrimaria);
   const nJogadores = plano.tokens.filter((t) => t.tipo === "proprio").length;
   const nAdversarios = plano.tokens.filter((t) => t.tipo === "adversario").length;
   const nMarcadores = plano.tokens.filter((t) => t.tipo === "marcador").length;
 
   return (
-    <div style={{ maxWidth: 760, margin: "0 auto" }}>
+    <div style={{ maxWidth: 900, margin: "0 auto" }}>
       <style>{`@media print { body * { visibility: hidden; } #report-paper, #report-paper * { visibility: visible; } #report-paper { position: absolute; top: 0; left: 0; width: 100%; } }`}</style>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
         <GhostBtn onClick={onVoltar}>‹ Bolas Paradas</GhostBtn>
@@ -2271,54 +2271,50 @@ function RelatorioBolaParada({ club, players, plano, onVoltar }) {
       </div>
 
       <div id="report-paper" style={{ background: "#FFFFFF", color: "#111", borderRadius: 18, padding: 24, marginBottom: 24, overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.35)" }}>
-        <div className="pdf-block">
-          <div style={{ textAlign: "center", marginBottom: 20 }}><ReportLogo size={32} /></div>
-          <div style={{ background: "linear-gradient(135deg, #111111, #B9873B)", borderRadius: 16, padding: "22px 24px", color: "#fff", marginBottom: 20, textAlign: "center", boxShadow: "0 8px 24px rgba(0,0,0,0.18)" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 8 }}>
-              <div style={{ width: 40, height: 40, borderRadius: 20, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
-                {club?.foto ? <img src={club.foto} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontWeight: 800, color: accent, fontSize: 13 }}>{club?.simbolo}</span>}
-              </div>
-              <div style={{ fontSize: 19, fontWeight: 800 }}>{plano.nome}</div>
-            </div>
-            <div style={{ fontSize: 12, opacity: 0.85 }}>{club?.nome}</div>
+        <div className="pdf-block" style={{ display: "flex", alignItems: "center", gap: 16, background: "linear-gradient(135deg, #111111, #B9873B)", borderRadius: 16, padding: "16px 22px", color: "#fff", marginBottom: 16, boxShadow: "0 8px 24px rgba(0,0,0,0.18)" }}>
+          <ReportLogo size={26} />
+          <div style={{ width: 1, height: 28, background: "rgba(255,255,255,0.3)" }} />
+          <div style={{ width: 34, height: 34, borderRadius: 17, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+            {club?.foto ? <img src={club.foto} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontWeight: 800, color: accent, fontSize: 12 }}>{club?.simbolo}</span>}
           </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 17, fontWeight: 800 }}>{plano.nome}</div>
+            <div style={{ fontSize: 11, opacity: 0.85 }}>{club?.nome}</div>
+          </div>
+        </div>
 
-          <div style={{ background: "#fafafa", border: "1px solid #eee", borderRadius: 14, padding: 18, marginBottom: 16, boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
-            <div style={{ position: "relative", width: "100%", maxWidth: plano.campo === "inteiro" ? "100%" : 560, aspectRatio: plano.campo === "inteiro" ? "100 / 62" : "1.24", background: "#2e7d32", border: "1px solid #ddd", borderRadius: 12, margin: "0 auto", overflow: "hidden", boxShadow: "0 6px 16px rgba(0,0,0,0.15)" }}>
-              <GrassStripes />
-              {plano.campo === "inteiro" ? <PitchLinesHorizontal /> : <PitchHalfLines />}
-              {plano.tokens.map((t) => {
-                const jogador = t.tipo === "proprio" ? players.find((p) => p.id === t.jogadorId) : null;
-                return (
-                  <div key={t.id} style={{ position: "absolute", left: `${t.x}%`, top: `${t.y}%`, transform: "translate(-50%,-50%)" }}>
-                    {t.tipo === "bola" ? (
-                      <div style={{ fontSize: 17, lineHeight: 1, filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.5))" }}>⚽</div>
-                    ) : t.tipo === "adversario" ? (
-                      <div style={{ width: 32, height: 32, borderRadius: 16, background: "#111111", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, color: "#fff", border: "2px solid #fff", boxShadow: "0 2px 5px rgba(0,0,0,0.35)" }}>A</div>
-                    ) : t.tipo === "marcador" ? (
-                      <div style={{ width: 20, height: 20, borderRadius: 10, background: "#fff", border: "2px solid #fff", boxShadow: "0 2px 5px rgba(0,0,0,0.35)" }} />
-                    ) : (
-                      <div style={{ position: "relative" }}>
-                        <Avatar label={initials(jogador?.nome)} photo={jogador?.foto} size={32} bg={accent} />
-                        <div style={{ position: "absolute", bottom: -3, right: -6, background: "#111", color: "#fff", fontSize: 9, fontWeight: 800, borderRadius: 7, padding: "0 4px", border: "1px solid #fff" }}>{jogador?.numero}</div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+        <div className="pdf-block" style={{ background: "#fafafa", border: "1px solid #eee", borderRadius: 14, padding: 14, marginBottom: 16, boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+          <div style={{ position: "relative", width: "100%", aspectRatio: plano.campo === "inteiro" ? "100 / 62" : "1.24", background: "#2e7d32", border: "1px solid #ddd", borderRadius: 12, overflow: "hidden", boxShadow: "0 6px 16px rgba(0,0,0,0.15)" }}>
+            <GrassStripes />
+            {plano.campo === "inteiro" ? <PitchLinesHorizontal /> : <PitchHalfLines />}
+            {plano.tokens.map((t) => {
+              const jogador = t.tipo === "proprio" ? players.find((p) => p.id === t.jogadorId) : null;
+              return (
+                <div key={t.id} style={{ position: "absolute", left: `${t.x}%`, top: `${t.y}%`, transform: "translate(-50%,-50%)" }}>
+                  {t.tipo === "bola" ? (
+                    <div style={{ fontSize: 22, lineHeight: 1, filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.5))" }}>⚽</div>
+                  ) : t.tipo === "adversario" ? (
+                    <div style={{ width: 38, height: 38, borderRadius: 19, background: "#111111", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 800, color: "#fff", border: "2px solid #fff", boxShadow: "0 2px 5px rgba(0,0,0,0.35)" }}>A</div>
+                  ) : t.tipo === "marcador" ? (
+                    <div style={{ width: 24, height: 24, borderRadius: 12, background: "#fff", border: "2px solid #fff", boxShadow: "0 2px 5px rgba(0,0,0,0.35)" }} />
+                  ) : (
+                    <div style={{ position: "relative" }}>
+                      <Avatar label={initials(jogador?.nome)} photo={jogador?.foto} size={38} bg={accent} />
+                      <div style={{ position: "absolute", bottom: -3, right: -6, background: "#111", color: "#fff", fontSize: 10, fontWeight: 800, borderRadius: 7, padding: "0 4px", border: "1px solid #fff" }}>{jogador?.numero}</div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
+        </div>
 
-          <div style={{ display: "flex", justifyContent: "center", gap: 18, flexWrap: "wrap", background: "#fafafa", border: "1px solid #eee", borderRadius: 12, padding: "12px 16px", fontSize: 11, fontWeight: 600, color: "#555" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 6, background: accent, display: "inline-block" }} /> Minha Equipa · {nJogadores}</span>
-            <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 6, background: "#111111", display: "inline-block" }} /> Adversário · {nAdversarios}</span>
-            <span style={{ display: "flex", alignItems: "center", gap: 6 }}>⚽ Bola</span>
-            {nMarcadores > 0 && <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 6, background: "#fff", border: "1px solid #ccc", display: "inline-block" }} /> Marcador · {nMarcadores}</span>}
-          </div>
-
-          <div style={{ textAlign: "center", marginTop: 22, paddingTop: 18, borderTop: "1px solid #eee" }}>
-            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 2.5, textTransform: "uppercase", background: "linear-gradient(135deg, #F2D48A, #B9873B)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Analyze. Perform. Win.</div>
-          </div>
+        <div className="pdf-block" style={{ display: "flex", justifyContent: "center", gap: 18, flexWrap: "wrap", background: "#fafafa", border: "1px solid #eee", borderRadius: 12, padding: "12px 16px", fontSize: 11, fontWeight: 600, color: "#555" }}>
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 6, background: accent, display: "inline-block" }} /> Minha Equipa · {nJogadores}</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 6, background: "#111111", display: "inline-block" }} /> Adversário · {nAdversarios}</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}>⚽ Bola</span>
+          {nMarcadores > 0 && <span style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ width: 12, height: 12, borderRadius: 6, background: "#fff", border: "1px solid #ccc", display: "inline-block" }} /> Marcador · {nMarcadores}</span>}
+          <span style={{ marginLeft: "auto", background: "linear-gradient(135deg, #F2D48A, #B9873B)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", fontSize: 9 }}>Analyze. Perform. Win.</span>
         </div>
       </div>
     </div>
@@ -2365,10 +2361,10 @@ function BolasParadasTab({ club, players, planos, setPlanos }) {
 
 /* ============================== CONDIÇÃO FÍSICA ============================== */
 const WELLNESS_NIVEIS = {
-  sono: ["Muito má", "Má", "Fraca", "Razoável", "Boa", "Muito boa", "Excelente"],
-  fadiga: ["Muito elevada", "Elevada", "Alguma", "Moderada", "Reduzida", "Quase nenhuma", "Sem fadiga"],
-  dorMuscular: ["Muito elevada", "Elevada", "Alguma", "Moderada", "Ligeira", "Quase nenhuma", "Sem dor"],
-  stress: ["Muito elevado", "Elevado", "Algum", "Moderado", "Reduzido", "Quase nenhum", "Sem stress"],
+  sono: ["Excelente", "Muito boa", "Boa", "Razoável", "Fraca", "Má", "Muito má"],
+  fadiga: ["Sem fadiga", "Quase nenhuma", "Reduzida", "Moderada", "Alguma", "Elevada", "Muito elevada"],
+  dorMuscular: ["Sem dor", "Quase nenhuma", "Ligeira", "Moderada", "Alguma", "Elevada", "Muito elevada"],
+  stress: ["Sem stress", "Quase nenhum", "Reduzido", "Moderado", "Algum", "Elevado", "Muito elevado"],
 };
 const WELLNESS_LABELS = { sono: "😴 Sono", fadiga: "🔋 Fadiga", dorMuscular: "💪 Dor Muscular", stress: "🧠 Stress" };
 const PSE_TIPOS = ["Treino", "Jogo", "Recuperação", "Ginásio", "Sessão Individual", "Reabilitação", "Complementar", "Outro"];
@@ -2376,9 +2372,9 @@ const PSE_NIVEIS = ["Repouso", "Muito leve", "Leve", "Moderado", "Algo intenso",
 
 function calcWellnessTotal(e) { return (e.sono || 0) + (e.fadiga || 0) + (e.dorMuscular || 0) + (e.stress || 0); }
 function classificarWellness(total) {
-  if (total >= 23) return { label: "Muito bom", color: "#30D158" };
-  if (total >= 17) return { label: "Bom", color: "#64D2FF" };
-  if (total >= 11) return { label: "Atenção", color: "#FFD60A" };
+  if (total <= 10) return { label: "Muito bom", color: "#30D158" };
+  if (total <= 16) return { label: "Bom", color: "#64D2FF" };
+  if (total <= 22) return { label: "Atenção", color: "#FFD60A" };
   return { label: "Risco elevado", color: "#FF453A" };
 }
 function calcCarga(duracao, pse) { return (Number(duracao) || 0) * (Number(pse) || 0); }
@@ -2392,8 +2388,8 @@ function statusAtleta(wellnessEntry) {
   if (!wellnessEntry) return { label: "Sem dados", color: T.sub };
   const total = calcWellnessTotal(wellnessEntry);
   const nota = wellnessEntry.notaGeral;
-  if (total <= 10 || (nota != null && nota <= 3)) return { label: "Risco elevado", color: "#FF453A" };
-  if (total <= 16 || (nota != null && nota <= 5)) return { label: "Atenção", color: "#FFD60A" };
+  if (total >= 23 || (nota != null && nota <= 3)) return { label: "Risco elevado", color: "#FF453A" };
+  if (total >= 17 || (nota != null && nota <= 5)) return { label: "Atenção", color: "#FFD60A" };
   return { label: "Disponível", color: "#30D158" };
 }
 
@@ -2519,7 +2515,7 @@ function WellnessListaTab({ players, data, wellnessEntries, setWellnessEntries, 
 
   return (
     <>
-      <div style={{ fontSize: 12, color: T.sub, marginBottom: 14 }}>Escala 1–7 em cada indicador (quanto maior, melhor o estado). A nota geral é de 0 a 10. Podes alterar a data de cada atleta individualmente, se precisares de preencher um dia anterior.</div>
+      <div style={{ fontSize: 12, color: T.sub, marginBottom: 14 }}>Escala 1–7 em cada indicador (1 = melhor estado, 7 = pior estado). A nota geral é de 0 a 10. Podes alterar a data de cada atleta individualmente, se precisares de preencher um dia anterior.</div>
       {players.map((p) => {
         const e = getEntry(p.id);
         const total = calcWellnessTotal(e);
@@ -2728,7 +2724,7 @@ function RelatorioPSE({ club, players, entries, periodoTexto, responsavel, onVol
   const exportarPDF = () => { if (window.exportarRelatorioPDFBlocos) window.exportarRelatorioPDFBlocos(`PSE_Carga_${club.nome.replace(/\\s+/g, "_")}.pdf`); else window.print(); };
   const jogadoresComDados = players.filter((p) => entries.some((e) => e.jogadorId === p.id));
   const comDados = jogadoresComDados.length;
-  const duracaoTotal = entries.reduce((s, e) => s + (Number(e.duracao) || 0), 0);
+  const duracaoMaxima = entries.length ? Math.max(...entries.map((e) => Number(e.duracao) || 0)) : 0;
   const cargaTotal = entries.reduce((s, e) => s + calcCarga(e.duracao, e.pse), 0);
   const mediaPSE = entries.length ? Math.round((entries.reduce((s, e) => s + (e.pse || 0), 0) / entries.length) * 10) / 10 : 0;
 
@@ -2748,7 +2744,7 @@ function RelatorioPSE({ club, players, entries, periodoTexto, responsavel, onVol
             {responsavel && <div style={{ fontSize: 10, opacity: 0.7, marginTop: 2 }}>Responsável: {responsavel}</div>}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
-            {[["Registos", `${entries.length}`], ["Duração Total", `${duracaoTotal} min`], ["PSE Médio", `${mediaPSE}/10`], ["Carga Total", `${cargaTotal} UA`]].map(([label, val]) => (
+            {[["Registos", `${entries.length}`], ["Duração Máxima", `${duracaoMaxima} min`], ["PSE Médio", `${mediaPSE}/10`], ["Carga Total", `${cargaTotal} UA`]].map(([label, val]) => (
               <div key={label} style={{ background: "#fafafa", border: "1px solid #eee", borderRadius: 12, padding: "12px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 16, fontWeight: 800 }}>{val}</div>
                 <div style={{ fontSize: 9, color: "#888", fontWeight: 700, textTransform: "uppercase", marginTop: 2 }}>{label}</div>
@@ -3513,7 +3509,6 @@ function App({ onLogout, accountEmail, adminSlot } = {}) {
     </div>
   );
 }
-
 /* ===================== CONFIGURAÇÃO DO FIREBASE (conta real + sincronização) ===================== */
 const firebaseConfig = {
   apiKey: "AIzaSyA2z5qTBb1f0zyhBjG4ukI7eEy8EYnH8-8",
@@ -3654,12 +3649,12 @@ function StorageErrorBanner() {
 
 /* Exporta o #report-paper para PDF, capturando cada secção (.pdf-block) separadamente e
    quebrando de página apenas entre secções — nunca a meio de uma tabela ou cartão. */
-window.exportarRelatorioPDFBlocos = async function (nomeFicheiro) {
+window.exportarRelatorioPDFBlocos = async function (nomeFicheiro, orientacao) {
   const container = document.getElementById("report-paper");
   if (!container || !window.html2canvas || !window.jspdf) { window.print(); return; }
   try {
     const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+    const pdf = new jsPDF({ orientation: orientacao || "portrait", unit: "pt", format: "a4" });
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
     const margin = 26;
@@ -3818,6 +3813,7 @@ function AuthGate() {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<AuthGate />);
+
 
 </script>
 </body>
