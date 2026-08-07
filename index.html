@@ -2468,10 +2468,9 @@ function RelatorioBolaParada({ club, players, plano, onVoltar }) {
             <div style={{ flex: 1, minWidth: 0, paddingTop: 4 }}>
               {marcadoresComLegenda.length > 0 && (
                 <div style={{ marginBottom: 8 }}>
-                  <div style={{ fontSize: 9, fontWeight: 800, color: "#111", marginBottom: 4 }}>📌 Legenda dos Marcadores</div>
                   {marcadoresComLegenda.map((t, i) => (
-                    <div key={t.id} style={{ display: "flex", alignItems: "flex-start", gap: 5, fontSize: 8, color: "#333", marginBottom: 3 }}>
-                      <span style={{ width: 8, height: 8, borderRadius: 4, background: t.cor || "#FF3B30", border: "1px solid #ccc", flexShrink: 0, marginTop: 2 }} />
+                    <div key={t.id} style={{ display: "flex", alignItems: "flex-start", gap: 6, fontSize: 10, color: "#333", marginBottom: 4 }}>
+                      <span style={{ width: 10, height: 10, borderRadius: 5, background: t.cor || "#FF3B30", border: "1px solid #ccc", flexShrink: 0, marginTop: 2 }} />
                       <span><b>{t.nome || `Marcador ${i + 1}`}</b>{t.legenda ? ` — ${t.legenda}` : ""}</span>
                     </div>
                   ))}
@@ -2479,10 +2478,9 @@ function RelatorioBolaParada({ club, players, plano, onVoltar }) {
               )}
               {plano.legendaCores && Object.values(plano.legendaCores).some((v) => v && v.trim()) && (
                 <div style={{ marginBottom: 8, paddingTop: marcadoresComLegenda.length > 0 ? 6 : 0, borderTop: marcadoresComLegenda.length > 0 ? "1px solid #eee" : "none" }}>
-                  <div style={{ fontSize: 9, fontWeight: 800, color: "#111", marginBottom: 4 }}>🎨 Legenda das Cores</div>
                   {Object.entries(plano.legendaCores).filter(([, v]) => v && v.trim()).map(([cor, texto]) => (
-                    <div key={cor} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 8, color: "#333", marginBottom: 3 }}>
-                      <span style={{ width: 9, height: 9, borderRadius: 4, background: cor, border: "1px solid #ccc", flexShrink: 0 }} />
+                    <div key={cor} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 10, color: "#333", marginBottom: 4 }}>
+                      <span style={{ width: 11, height: 11, borderRadius: 5, background: cor, border: "1px solid #ccc", flexShrink: 0 }} />
                       <span>{texto}</span>
                     </div>
                   ))}
@@ -2490,8 +2488,8 @@ function RelatorioBolaParada({ club, players, plano, onVoltar }) {
               )}
               {plano.observacoes && (
                 <div style={{ paddingTop: (marcadoresComLegenda.length > 0 || (plano.legendaCores && Object.values(plano.legendaCores).some((v) => v && v.trim()))) ? 6 : 0, borderTop: (marcadoresComLegenda.length > 0 || (plano.legendaCores && Object.values(plano.legendaCores).some((v) => v && v.trim()))) ? "1px solid #eee" : "none" }}>
-                  <div style={{ fontSize: 9, fontWeight: 800, color: "#111", marginBottom: 3 }}>📝 Observações</div>
-                  <div style={{ fontSize: 8, color: "#333", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>{plano.observacoes}</div>
+                  <div style={{ fontSize: 10, fontWeight: 800, color: "#111", marginBottom: 3 }}>📝 Observações</div>
+                  <div style={{ fontSize: 10, color: "#333", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>{plano.observacoes}</div>
                 </div>
               )}
             </div>
