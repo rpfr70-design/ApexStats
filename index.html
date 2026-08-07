@@ -2433,7 +2433,7 @@ function RelatorioBolaParada({ club, players, plano, onVoltar }) {
           return (
         <div className="pdf-block">
         <div style={{ background: "#fafafa", border: "1px solid #eee", borderRadius: 12, padding: 10, marginBottom: 8, boxShadow: "0 2px 8px rgba(0,0,0,0.04)", display: "flex", gap: 14, alignItems: "flex-start", justifyContent: temLegenda ? "flex-start" : "center" }}>
-          <div style={{ width: temLegenda ? (plano.campo === "inteiro" ? "62%" : "50%") : (plano.campo === "inteiro" ? "89%" : "73%"), flexShrink: 0 }}>
+          <div style={{ width: plano.campo === "inteiro" ? "89%" : "73%", flexShrink: 0 }}>
             <div style={{ position: "relative", width: "100%", height: 0, paddingBottom: plano.campo === "inteiro" ? "62%" : "80.6%", background: "#2e7d32", border: "1px solid #ddd", borderRadius: 10, overflow: "hidden", boxShadow: "0 6px 16px rgba(0,0,0,0.15)" }}>
               <div style={{ position: "absolute", inset: 0 }}>
                 <GrassStripes />
